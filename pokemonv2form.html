@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<title>Pokemon Battle System</title>
+<style>
+ body {margin: 0; top: -10px;}
+ button {width: 150px; padding: 10px; margin:5px;}
+ span {font-weight: 900;}
+ input {font-size: 16px; padding: 10px; border-radius: 6px;}
+
+ #theForm {
+ border: 1px solid black;
+ max-width: 400px;
+ width: 100%;
+ padding: 20px;
+ padding-top: 10px;
+ background-color: #eeeeee;
+ position: absolute;
+ z-index: 1000;
+ margin: auto;
+ left: 0;
+ right: 0;
+ top: 100px;
+ }
+
+ #lightbox {
+ display: block;
+ width: 100%;
+ background-color: black;
+ opacity: 0.6;
+ height: 100%;
+ position: absolute;
+ z-index: 500;
+ }
+
+ .fields {
+ box-sizing: border-box;
+ padding: 10px;
+ width: 100%;
+ margin-top: 20px;
+ margin-bottom: 20px;
+ }
+
+ #submit {
+ color: #ffffff;
+ background-color: #004580;
+ width: 100%;
+ font-size: 16px;
+ }
+
+ p {
+ font-size: 18px;
+ text-align: center;
+ font-family: Helvetica;
+ margin: 0;
+ padding: 30px 0;
+ }
+
+</style>
+</head>
+
+<body>
+  <div id="lightbox" width="100"></div>
+<center>
+<form id="theForm">
+  <img src="https://cdn0.iconfinder.com/data/icons/pixon-1/24/circle_close_delete_exit_remove_x_outline-512.png" width="30px" id="close" align="right"><br><br>
+  <p> Subscribe to my mailing list</p>
+  <input type="text" id="name" class="fields" name="name" placeholder="Name">
+  <input type="text" id="email1" class="fields" name="email"  placeholder="Email Address">
+  <input name="submit" id="submit" class="fields" type="submit" value="Sign me up!">
+</form>
+
+
+<p>Type in the Pokemon you will be battling or click on the type below</p>
+<div width="100%" style="max-width: 500px; display: inline-block;">
+  <input type="text" size="30" class="pokeName" placeholder="What Pokemon will you be battling?" value="">
+  <br><br>
+  <p class="use" style="display:none;"> You have selected a <span class="selectedType"> Normal </span> Tpye Pokemon. You should use a <span class="suggestedType"> Normal </span> Type against them, such as <span class="suggestedMon"> Normal </span></p>
+  <br><br>
+  <button id="normalType" value="Normal">Normal</button>
+  <button id="grassType" value="Grass">Grass</button>
+  <button id="bugType" value="Bug">Bug</button>
+  <button id="groundType" value="Ground">Ground</button>
+  <button id="rockType" value="Rock">Rock</button>
+  <button id="fightingType" value="Fighting">Fighting</button>
+  <button id="fireType" value="Fire">Fire</button>
+  <button id="waterType" value="Water">Water</button>
+  <button id="electricType" value="Electric">Electric</button>
+  <button id="iceType" value="Ice">Ice</button>
+  <button id="steelType" value="Steel">Steel</button>
+  <button id="flyingType" value="Flying">Flying</button>
+  <button id="fairyType" value="Fairy">Fairy</button>
+  <button id="darkType" value="Dark">Dark</button>
+  <button id="poisonType" value="Poison">Poison</button>
+  <button id="ghostType" value="Ghost">Ghost</button>
+  <button id="psychicType" value="Psychic">Psychic</button>
+  <button id="dragonType" value="Dragon">Dragon</button>
+
+</div></center>
+
+  <script>
+  var normalType = ["Snorlax", "Farfetchd", "Dodrio", "Wigglytuff", "Raticate", "Persian", "Lickitung", "Pidgey", "Eevee", "Chansey", "Kangaskhan", "Tauros", "Ditto", "Porygon", "Togepi", "Togetic", "Aipom", "Granbull", "Ursaring", "Porygon2", "Stantler", "Smeargle", "Miltank", "Blissey", "Zigzagoon", "Linoone", "Swellow", "Slakoth", "Vigoroth", "Slaking", "Whismur", "Loudred", "Exploud", "Skitty", "Delcatty", "Spinda", "Swablu", "Zangoose", "Castform", "Kecleon", "Starly", "Staravia", "Staraptor", "Bidoof", "Bibarel", "Ambipom", "Buneary", "Lopunny", "Glameow", "Purugly", "Happiny", "Chatot", "Munchlax", "Lickilicky", "Togekiss", "Porygon-Z", "Regigigas", "Arceus"];
+
+  var fightingType = ["Machamp", "Breloom", "Hariyama", "Blaziken", "Heracross",  "Lucario", "Toxicroak", "Croagunk", "Poliwrath", "Primeape", "Makuhita", "Hitmonlee", "Hitmonchan", "Tyrogue", "Hitmontop", "Meditite", "Medicham", "Monferno", "Infernape", "Lopunny", "Riolu", "Gallade", "Pignite"];
+
+  var flyingType = ["Moltres", "Rayquaza", "Zapdos", "Lugia", "Ho-Oh", "Articuno", "Dragonite", "Charizard", "Gyarados", "Salamence", "Togekiss", "Yanmega", "Pidgey", "Crobat", "Farfetchd", "Dodrio", "Golbat", "Aerodactyl", "Scyther", "Noctowl", "Togetic", "Jumpluff", "Yanma", "Murkrow", "Gligar", "Delibird", "Mantine", "Skarmory", "Beautifly", "Taillow", "Swellow", "Wingull", "Pelipper", "Masquerain", "Ninjask", "Swablu", "Altaria", "Tropius", "Starly", "Staravia", "Staraptor", "Mothim", "Combee", "Vespiquen", "Drifloon", "Drifblim", "Honchkrow", "Chatot", "Mantyke", "Gliscor", "Rotom", "Shaymin"];
+
+  var groundType = ["Groudon", "Garchomp", "Rhyperior", "Mamoswine", "Flygon", "Torterra", "Golem", "Rhydon", "Steelix", "Nidoqueen", "Nidoking", "Sandslash", "Marowak", "Quagsire", "Gligar", "Swinub", "Donphan", "Marshtomp", "Swampert", "Nincada", "Numel", "Camerupt", "Trapinch", "Vibrava", "Barboach", "Whiscash", "Baltoy", "Claydol", "Wormadam", "Gastrodon", "Gible", "Gabite", "Hippopotas", "Hippowdon", "Gliscor"];
+
+  var poisonType = ["Gengar", , "Toxicroak", "Vileplume", "Victreebel", "Venusaur", "Crobat", "Weezing", "Muk", "Golbat", "Nidoqueen", "Nidoking", "Tentacruel", "Arbok", "Bulbasaur", "Nidorino", "Roselia", "Gulpin", "Swalot", "Seviper", "Budew", "Roserade", "Stunky", "Skuntank", "Skorupi", "Drapion", "Croagunk"];
+
+  var rockType = ["Rampardos", "Tyranitar", "Rhyperior", "Aerodactyl", "Omastar", "Golem", "Rhydon", "Aggron", "Regirock", "Aron", "Kabutops", "Corsola", "Lairon",  "Lunatone", "Solrock", "Lileep", "Cradily", "Anorith", "Armaldo", "Relicanth",  "Cranidos", "Shieldon", "Bastiodon", "Bonsly", "Probopass"];
+
+  var bugType = ["Pinsir", "Scizor", "Yanmega", "Scyther", "Heracross", "Forretress", "Silcoon", "Beautifly", "Surskit", "Masquerain", "Nincada", "Ninjask", "Shedinja", "Volbeat", "Illumise", "Anorith", "Armaldo", "Kricketot", "Kricketune", "Burmy", "Wormadam", "Mothim", "Combee", "Vespiquen", "Skorupi"];
+
+  var ghostType = ["Darkrai (with ghost moves)", "Giratina (Origin form)", "Chandelure", "Shadow Ball Mewtwo", "Gengar", "Marowak", "Misdreavus", "Shedinja", "Sableye", "Shuppet", "Banette", "Duskull", "Dusclops", "Drifloon", "Drifblim", "Mismagius", "Giratina", "Spiritomb", "Dusknoir", "Froslass", "Rotom", "Darkrai"];
+
+  var steelType = ["Metagross", "Dialga", "Steelix", "Scizor", "Megneton", "Forretress", "Skarmory", "Mawile", "Aron", "Lairon", "Aggron", "Beldum", "Metang",  "Registeel", "Jirachi", "Empoleon", "Shieldon", "Bastiodon", "Wormadam", "Bronzor", "Bronzong", "Lucario", "Magnezone", "Probopass", "Heatran"];
+
+  var fireType = ["Chandelure (with fire moves)", "Moltres", "Entei", "Blaziken (with fire moves)", "Charizard", "Heatran", "Flareon", "Magmortar", "Monferno", "Ninetales", "Arcanine", "Ho-Oh", "Rapidash",  "Blaziken", "Magmar", "Magcargo", "Houndoom", "Magby", "Numel", "Camerupt", "Chandelure", "Torkoal", "Castform", "Groudon", "Chimchar", "Infernape", "Rotom", "Victini", "Tepig", "Pignite"];
+
+  var waterType = ["Kyogre", "Kingler", "Swampert", "Feraligatr", "Gyarados", "Sharpedo", "Vaporeon", "Lapras", "Omastar", "Kabutops", "Blastoise", "Golduck", "Poliwrath", "Tentacruel", "Dewgong", "Squirtle", "Cloyster",  "Seadra", "Seaking", "Chinchou", "Lanturn", "Marill", "Azumarill", "Politoed", "Wooper", "Quagsire", "Slowking", "Qwilfish", "Corsola", "Remoraid", "Octillery", "Mantine", "Kingdra", "Suicune", "Mudkip", "Marshtomp", "Lotad", "Lombre", "Ludicolo", "Wingull", "Pelipper", "Surskit", "Carvanha", "Wailmer", "Wailord", "Barboach", "Whiscash", "Corphish", "Crawdaunt", "Feebas", "Milotic", "Castform", "Spheal", "Sealeo", "Walrein", "Clamperl", "Huntail", "Gorebyss", "Relicanth", "Luvdisc", "Piplup", "Prinplup", "Empoleon", "Bibarel", "Buizel", "Floatzel", "Shellos", "Gastrodon", "Finneon", "Lumineon", "Mantyke", "Rotom", "Palkia", "Phione", "Manaphy"];
+
+  var grassType = ["Sceptile", "Venusaur", "Torterra", "Leafeon", "Gogoat", "Oddish", "Gloom", "Bulbasaur", "Ivysaur", "Vileplume", "Paras", "Parasect", "Bellsprout", "Weepinbell", "Victreebel", "Exeggcute", "Exeggutor", "Exeggutor", "Tangela", "Chikorita", "Bayleef", "Meganium", "Bellossom", "Hoppip", "Skiploom", "Jumpluff", "Sunkern", "Sunflora", "Celebi", "Treecko", "Grovyle", "Lotad", "Lombre", "Ludicolo", "Seedot", "Nuzleaf", "Shiftry", "Shroomish", "Breloom", "Roselia", "Cacnea", "Cacturne", "Lileep", "Cradily", "Tropius", "Turtwig", "Grotle", "Budew", "Roserade", "Wormadam", "Cherubi", "Cherrim", "Carnivine", "Snover", "Abomasnow", "Tangrowth ", "Rotom", "Shaymin", "Shaymin", "Snivy", "Servine", "Serperior", "Pansage", "Simisage", "Sewaddle", "Swadloon", "Leavanny", "Cottonee", "Whimsicott", "Petilil", "Lilligant", "Maractus", "Deerling", "Sawsbuck", "Foongus", "Amoonguss", "Ferroseed", "Ferrothorn", "Virizion", "Chespin", "Quilladin", "Chesnaught", "Skiddo", "Phantump", "Trevenant", "Pumpkaboo", "Pumpkaboo", "Pumpkaboo", "Pumpkaboo", "Gourgeist", "Gourgeist", "Gourgeist", "Gourgeist", "Rowlet", "Dartrix", "Decidueye", "Fomantis", "Lurantis", "Morelull", "Shiinotic", "Bounsweet", "Steenee", "Tsareena", "Dhelmise", "Tapu Bulu", "Kartana"];
+
+  var electricType = ["Raikou", "Electrode", "Manectric", "Zapdos", "Luxray", "Magneton", "Raichu", "Electabuzz", "Jolteon", "Pikachu", "Magnemite", "Elekid", "Electrike", "Plusle", "Minun", "Shinx", "Luxio", "Pachirisu", "Magnezone", "Electivire", "Rotom"];
+
+  var psychicType = ["Mewtwo", "Latios", "Metagross (with psychic moves)", "Espeon", "Exeggutor", "Latias", "Lugia", "Alakazam", "Slowbro", "Jynx", "Mr-mime", "Hypno", "Unown", "Celebi", "Ralts", "Kirlia", "Gardevoir", "Meditite", "Medicham", "Metagross", "Spoink", "Grumpig", "Lunatone", "Solrock", "Baltoy", "Claydol", "Chimecho", "Wynaut", "Beldum", "Metang", "Jirachi", "Deoxys", "Chingling", "Bronzor", "Bronzong", "Mime Jr.", "Gallade", "Uxie", "Mesprit", "Azelf", "Cresselia", "Victini"];
+
+  var iceType = ["Mamoswine", "Mewtwo (with ice moves)", "Glaceon", "Weavile", "Jynx", "Lapras", "Articuno", "Regice", "Cloyster", "Dewgong", "Sneasel", "Piloswine", "Delibird", "Smoochum", "Castform", "Snorunt", "Glalie", "Spheal", "Sealeo", "Walrein", "Snover", "Abomasnow", "Froslass", "Rotom"];
+
+  var dragonType = ["Rayquaza", "Dialga", "Palkia", "Salamence", "Garchomp", "Dragonite", "Latias", "Latios", "Giratina", "Dratini", "Dragonair", "Kingdra", "Sceptile", "Vibrava", "Flygon", "Altaria", "Bagon", "Shelgon", "Gible", "Gabite"];
+
+  var darkType = ["Darkrai", "Weavile", "Tyranitar", "Absol", "Houndoom", "Muk", "Gyarados", "Umbreon", "Mightyena", "Sneasel", "Rattata", "Raticate", "Meowth", "Persian", "Grimer", "Murkrow", "Houndour", "Poochyena", "Nuzleaf", "Shiftry", "Sableye", "Carvanha", "Sharpedo", "Sharpedo", "Cacturne", "Crawdaunt", "Honchkrow", "Stunky", "Skuntank", "Spiritomb", "Drapion", "Purrloin", "Liepard", "Sandile", "Krokorok", "Krookodile", "Scraggy", "Pawniard", "Bisharp", "Vullaby", "Mandibuzz", "Deino", "Zweilous", "Hydreigon", "Pangoro", "Inkay", "Malamar", "Yveltal", "Hoopa", "Incineroar", "Guzzlord"];
+
+  var fairyType= ["Togekiss", "Gardevoir", "Granbull", "Latias", "Wigglytuff", "Mew", "Clefable", "Mr-mime", "Jigglypuff", "Clefairy", "Snubbull", "Ralts", "Kirlia", "Azurill", "Mawile", "Altaria", "Mime Jr."];
+
+  var pokeName = $(".pokeName").val();
+
+  function pokeChecker() {
+    console.log(pokeName);
+    if (normalType.indexOf($(".pokeName").val())>=0 || this.value == "Normal"){
+      $(".use").css("display", "block");
+      $(".selectedType").text("Normal");
+      $(".suggestedType").text("Fighting");
+      $(".suggestedMon").text(fightingType.slice(0,6).join(" or ") + ".");
+    }
+    if (fightingType.indexOf($(".pokeName").val())>=0 || this.value == "Fighting") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Fighting");
+      $(".suggestedType").text("Psychic");
+      $(".suggestedMon").text(psychicType.slice(0,6).join(" or ") + ".");
+        /* or flying or fairy*/
+    }
+    if (flyingType.indexOf($(".pokeName").val())>=0 || this.value == "Flying") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Flying");
+      $(".suggestedType").text("Electric");
+      $(".suggestedMon").text(electricType.slice(0,6).join(" or ") + ".");
+      /* or ice or rock*/
+    }
+    if (poisonType.indexOf($(".pokeName").val())>=0 || this.value == "Poison") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Poison");
+      $(".suggestedType").text("Ground");
+      $(".suggestedMon").text(groundType.slice(0,6).join(" or ") + ".");
+      /* or psychic*/
+    }
+    if (groundType.indexOf($(".pokeName").val())>=0 || this.value == "Ground") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Ground");
+      $(".suggestedType").text("Water");
+      $(".suggestedMon").text(waterType.slice(0,6).join(" or ") + ".");
+      /* or grass or ice*/
+    }
+    if (rockType.indexOf($(".pokeName").val())>=0 || this.value == "Rock") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Rock");
+      $(".suggestedType").text("Fighting");
+      $(".suggestedMon").text(fightingType.slice(0,6).join(" or ") + ".");
+      /* or steel or water or grass or ground*/
+    }
+    if (bugType.indexOf($(".pokeName").val())>=0 || this.value == "Bug") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Bug");
+      $(".suggestedType").text("Flying");
+      $(".suggestedMon").text(flyingType.slice(0,6).join(" or ") + ".");
+      /* or rock or fire*/
+    }
+    if (ghostType.indexOf($(".pokeName").val())>=0 || this.value == "Ghost") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Ghost");
+      $(".suggestedType").text("Dark");
+      $(".suggestedMon").text(darkType.slice(0,6).join(" or ") + ".");
+      /* or rock or flying*/
+    }
+    if (steelType.indexOf($(".pokeName").val())>=0 || this.value == "Steel") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Steel");
+      $(".suggestedType").text("Flying");
+      $(".suggestedMon").text(flyingType.slice(0,6).join(" or ") + ".");
+      /* or fighting or ground or fire*/
+    }
+    if (fireType.indexOf($(".pokeName").val())>=0 || this.value == "Fire") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Fire");
+      $(".suggestedType").text("Ground");
+      $(".suggestedMon").text(groundType.slice(0,6).join(" or ") + ".");
+      // or rock or water
+    }
+    if (waterType.indexOf($(".pokeName").val())>=0 || this.value == "Water") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Water");
+      $(".suggestedType").text("Electric");
+      $(".suggestedMon").text(electricType.slice(0,6).join(" or ") + ".");
+      //or grass
+    }
+    if (grassType.indexOf($(".pokeName").val())>=0 || this.value == "Grass") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Grass");
+      $(".suggestedType").text("Flying");
+      $(".suggestedMon").text(flyingType.slice(0,6).join(" or ") + ".");
+      //or fire or flying or poison or ice
+    }
+    if (electricType.indexOf($(".pokeName").val())>=0 || this.value == "Electric") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Electric");
+      $(".suggestedType").text("Ground");
+      $(".suggestedMon").text(groundType.slice(0,6).join(" or ") + ".");
+    }
+    if (psychicType.indexOf($(".pokeName").val())>=0 || this.value == "Psychic") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Psychic");
+      $(".suggestedType").text("Ground");
+      $(".suggestedMon").text(groundType.slice(0,6).join(" or ") + ".");
+      // or bug or dark
+    }
+    if (iceType.indexOf($(".pokeName").val())>=0 || this.value == "Ice") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Ice");
+      $(".suggestedType").text("Fire");
+      $(".suggestedMon").text(fireType.slice(0,6).join(" or ") + ".");
+      // or fighting or steel or rock
+    }
+    if (dragonType.indexOf($(".pokeName").val())>=0 || this.value == "Dragon") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Dragon");
+      $(".suggestedType").text("Fairy");
+      $(".suggestedMon").text(fairyType.slice(0,6).join(" or ") + ".");
+      // or ice dragon
+    }
+    if (darkType.indexOf($(".pokeName").val())>=0 || this.value == "Dark") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Dark");
+      $(".suggestedType").text("Fairy");
+      $(".suggestedMon").text(fairyType.slice(0,6).join(" or ") + ".");
+      // or fighting or bug
+    }
+    if (fairyType.indexOf($(".pokeName").val())>=0 || this.value == "Fairy") {
+      $(".use").css("display", "block");
+      $(".selectedType").text("Fairy");
+      $(".suggestedType").text("Poison");
+      $(".suggestedMon").text(poisonType.slice(0,6).join(" or ") + ".");
+      // or steel
+    }
+
+  }
+
+  $(".pokeName").on("change paste keyup", pokeChecker);
+  $("button").on("click", pokeChecker);
+
+  var hider = function () {
+    document.getElementById("theForm").style.display = "none";
+    document.getElementById("lightbox").style.display = "none";
+  }
+
+  document.getElementById("close").addEventListener("click", hider);
+
+  </script>
+   }
+</body>
+</html>
